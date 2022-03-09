@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { Request, response, Response } from 'express'
 import puppeteer from 'puppeteer'
 import dotenv from 'dotenv'
 
@@ -28,11 +28,34 @@ export default class ScrapingController {
     return new Promise(resolve => setTimeout(resolve, 1000 * seconds))
   }
 
-  private loginInInstagram = async (browser: puppeteer.Browser) => {
-    const url = 'https://www.instagram.com'
+  private goToPage = async (browser: puppeteer.Browser, url: string) => {
     const page = await browserOptions.newPage(browser)
 
-    await page.goto(url, { waitUntil: [ 'load', 'networkidle0' ] })
+    let tryGoToPage = 0
+    let sucess = false
+
+    while (tryGoToPage < 5 && !sucess) {
+      await page.goto(url, { waitUntil: ['networkidle0', 'load'] })
+        .then(response => {
+          console.log(response.status(), url);
+
+          if (response.status() === 200) {
+            sucess = true
+          }
+        })
+        .catch(error => {
+          console.log('go to page error: ', error)
+        })
+
+      tryGoToPage += 1
+    }
+
+    return page
+  }
+
+  private loginInInstagram = async (browser: puppeteer.Browser) => {
+    const url = 'https://www.instagram.com'
+    const page = await this.goToPage(browser, url)
 
     await page.type("input[name='username']", String(process.env.INSTAGRAM_USER), {  delay: 50 })
     await page.type("input[name='password']", String(process.env.INSTAGRAM_PASSWORD), {  delay: 50 })
@@ -48,9 +71,7 @@ export default class ScrapingController {
    * @returns content of posts
    */
   private getPostsImagesSourcesAndReferences = async (browser: puppeteer.Browser) => {
-    const page = await browserOptions.newPage(browser)
-
-    await page.goto(this.url)
+    const page = await this.goToPage(browser, this.url)
 
     const result: Array<postsSourceInterface> = await page.evaluate((totalOfGrids) => {
       let result = [
@@ -99,31 +120,13 @@ export default class ScrapingController {
   private getPostsContent = async (browser: puppeteer.Browser, postsSources: Array<postsSourceInterface>) => {
     let result: Array<postsContentInterface> = []
 
-    for (let index = 0; index < postsSources.length; index++) {
-      const postSource = postsSources[index]
-      
-      const postPage = await browserOptions.newPage(browser)
+    const requests = postsSources.map(async (postSource) => {
+      let content = ''
+      let isCatchError = false
 
-      let tryGoToPage = 0
-      let sucess = false
-      
-      while (tryGoToPage < 5 && !sucess) {
-        await postPage.goto(postSource.postRef, { waitUntil: 'load' })
-          .then(response => {
-            console.log(response.status());
+      const postPage = await this.goToPage(browser, postSource.postRef)
 
-            if (response.status() === 200) {
-              sucess = true
-            }
-          })
-          .catch(error => {
-            console.log('go to page error: ', error)
-          })
-
-        tryGoToPage += 1
-      }
-
-      const postText = await postPage.evaluate(() => {
+      await postPage.evaluate(() => {
         let result = ''
 
         let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
@@ -134,23 +137,103 @@ export default class ScrapingController {
 
         return result
       })
+        .then(response => {
+          content = response
+        })
+        .catch(() => {
+          isCatchError = true
+        })
+
+      if (isCatchError) {
+        const postPage = await this.goToPage(browser, postSource.postRef)
+
+        await postPage.evaluate(() => {
+          let result = ''
+  
+          let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
+  
+          if (!!spanWithText) {
+            result = String(spanWithText.textContent)
+          }
+  
+          return result
+        })
+          .then(response => {
+            content = response
+          })
+      }
 
       result.push({
         ...postSource,
-        content: postText
+        content
       })
 
       await this.sleep(5)
 
       await postPage.close()
-    }
+    })
+    await Promise.all(requests)
+
+    // for (let index = 0; index < postsSources.length; index++) {
+    //   let content = ''
+    //   let isCatchError = false
+
+    //   const postSource = postsSources[index]
+      
+    //   const postPage = await this.goToPage(browser, postSource.postRef)
+
+    //   await postPage.evaluate(() => {
+    //     let result = ''
+
+    //     let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
+
+    //     if (!!spanWithText) {
+    //       result = String(spanWithText.textContent)
+    //     }
+
+    //     return result
+    //   })
+    //     .then(response => {
+    //       content = response
+    //     })
+    //     .catch(() => {
+    //       isCatchError = true
+    //     })
+
+    //   if (isCatchError) {
+    //     const postPage = await this.goToPage(browser, postSource.postRef)
+
+    //     await postPage.evaluate(() => {
+    //       let result = ''
+  
+    //       let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
+  
+    //       if (!!spanWithText) {
+    //         result = String(spanWithText.textContent)
+    //       }
+  
+    //       return result
+    //     })
+    //       .then(response => {
+    //         content = response
+    //       })
+    //   }
+
+    //   result.push({
+    //     ...postSource,
+    //     content
+    //   })
+
+    //   await this.sleep(5)
+
+    //   await postPage.close()
+    // }
 
     return result
   }
 
   public test = async (req: Request, res: Response) => {
     const browser = await browserOptions.runBrowser()
-    const page = await browserOptions.newPage(browser)
 
     await this.loginInInstagram(browser)
     

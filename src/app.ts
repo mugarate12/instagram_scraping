@@ -26,8 +26,4 @@ app.use(routes)
 // celebrate errors
 app.use(errors())
 
-const PORT = !process.env.PORT ? 3333 :  process.env.PORT
-
-server.listen(PORT, () => {
-  console.log(`listening on port ${PORT}`)
-})
+export default app
