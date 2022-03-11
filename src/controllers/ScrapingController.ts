@@ -6,6 +6,10 @@ import {
   browserOptions
 } from './../utils'
 
+import {
+  Scraping
+} from './../database/models'
+
 dotenv.config()
 
 interface postsSourceInterface {
@@ -174,61 +178,6 @@ export default class ScrapingController {
     })
     await Promise.all(requests)
 
-    // for (let index = 0; index < postsSources.length; index++) {
-    //   let content = ''
-    //   let isCatchError = false
-
-    //   const postSource = postsSources[index]
-      
-    //   const postPage = await this.goToPage(browser, postSource.postRef)
-
-    //   await postPage.evaluate(() => {
-    //     let result = ''
-
-    //     let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
-
-    //     if (!!spanWithText) {
-    //       result = String(spanWithText.textContent)
-    //     }
-
-    //     return result
-    //   })
-    //     .then(response => {
-    //       content = response
-    //     })
-    //     .catch(() => {
-    //       isCatchError = true
-    //     })
-
-    //   if (isCatchError) {
-    //     const postPage = await this.goToPage(browser, postSource.postRef)
-
-    //     await postPage.evaluate(() => {
-    //       let result = ''
-  
-    //       let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
-  
-    //       if (!!spanWithText) {
-    //         result = String(spanWithText.textContent)
-    //       }
-  
-    //       return result
-    //     })
-    //       .then(response => {
-    //         content = response
-    //       })
-    //   }
-
-    //   result.push({
-    //     ...postSource,
-    //     content
-    //   })
-
-    //   await this.sleep(5)
-
-    //   await postPage.close()
-    // }
-
     return result
   }
 
@@ -243,8 +192,23 @@ export default class ScrapingController {
     
     await browserOptions.closeBrowser(browser)
 
+    await Scraping.destroy({
+      truncate: true,
+      force: true
+    })
+
+    for (let index = 0; index < posts.length; index++) {
+      const post = posts[index]
+      
+      await Scraping.create({
+        content: post.content,
+        ref: post.postRef,
+        source: post.imageSource
+      })
+    }
+
     return res.status(200).json({
-      resultado: posts,
+      // resultado: posts,
       // postText
     })
   }

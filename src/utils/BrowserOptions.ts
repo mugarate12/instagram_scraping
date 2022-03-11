@@ -46,7 +46,6 @@ export default class BrowserOptions {
       headless: true, 
       args: minimal_args,
       slowMo: 200
-      // userDataDir: false
     })
     
     return browser

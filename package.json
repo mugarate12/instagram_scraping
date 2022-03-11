@@ -21,7 +21,8 @@
     "moment-timezone": "^0.5.34",
     "mysql2": "^2.3.3",
     "puppeteer": "^13.4.1",
-    "run-script-os": "^1.1.6"
+    "run-script-os": "^1.1.6",
+    "sequelize": "^6.17.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",
