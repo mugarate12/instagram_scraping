@@ -182,21 +182,36 @@ export default class ScrapingController {
   }
 
   private updateData = async (postsContent: Array<postsContentInterface>) => {
-    // delete all data
-    await Scraping.destroy({
-      truncate: true,
-      force: true
-    })
-
-    const requests = postsContent.map(async (post) => {
-      await Scraping.create({
-        content: post.content,
-        ref: post.postRef,
-        source: post.imageSource
+    if (postsContent.length > 0) {
+      // delete all data
+      await Scraping.destroy({
+        truncate: true,
+        force: true
       })
-    })
+  
+      const requests = postsContent.map(async (post) => {
+        await Scraping.create({
+          content: post.content,
+          ref: post.postRef,
+          source: post.imageSource
+        })
+      })
+  
+      await Promise.all(requests)
+    }
+  }
 
-    await Promise.all(requests)
+  public routine = async () => {
+    const browser = await browserOptions.runBrowser()
+
+    await this.loginInInstagram(browser)
+    
+    const result = await this.getPostsImagesSourcesAndReferences(browser)
+    const posts = await this.getPostsContent(browser, result)
+    
+    await browserOptions.closeBrowser(browser)
+
+    await this.updateData(posts)
   }
 
   public test = async (req: Request, res: Response) => {

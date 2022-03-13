@@ -7,7 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "run-script-os",
     "dev:win32": "SET NODE_ENV=development&&nodemon --exec ts-node --files src/server.ts",
-    "dev:darwin:linux": "export NODE_ENV=development&&nodemon --exec ts-node --files src/server.ts"
+    "dev:darwin:linux": "export NODE_ENV=development&&nodemon --exec ts-node --files src/server.ts",
+    "build": "tsc",
+    "start": "run-script-os",
+    "start:win32": "SET NODE_ENV=production&&node build/server.js",
+    "start:darwin:linux": "export NODE_ENV=production&&node build/server.js"
   },
   "keywords": [],
   "author": "",
