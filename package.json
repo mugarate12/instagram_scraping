@@ -10,8 +10,8 @@
     "dev:darwin:linux": "export NODE_ENV=development&&nodemon --exec ts-node --files src/server.ts",
     "build": "tsc",
     "start": "run-script-os",
-    "start:win32": "SET NODE_ENV=production&&node build/server.js",
-    "start:darwin:linux": "export NODE_ENV=production&&node build/server.js"
+    "start:win32": "SET NODE_ENV=production&&node build/src/server.js",
+    "start:darwin:linux": "export NODE_ENV=production&&node build/src/server.js"
   },
   "keywords": [],
   "author": "",
