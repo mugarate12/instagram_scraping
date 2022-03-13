@@ -214,6 +214,16 @@ export default class ScrapingController {
     await this.updateData(posts)
   }
 
+  public get = async (req: Request, res: Response) => {
+    const posts = await Scraping.findAll({
+      attributes: [ 'id', 'content', 'ref', 'source' ]
+    })
+
+    return res.status(200).json({
+      data: posts
+    })
+  }
+
   public test = async (req: Request, res: Response) => {
     const browser = await browserOptions.runBrowser()
 

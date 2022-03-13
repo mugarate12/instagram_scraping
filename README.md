@@ -35,9 +35,9 @@ $ npm run dev
 - [x] Scraping instagram page of a public perfil and get 9 recent posts image source and page ref
 - [x] Login on pseudoInstagram
 - [x] Get content of each post
-- [ ] Convert and save this in database
-- [ ] Save link of image and content of post in database
-- [ ] Create route to get all information of 9 recent posts
-- [ ] Configure Heroku Clock 
+- [x] Convert and save this in database
+- [x] Save link of image and content of post in database
+- [x] Create route to get all information of 9 recent posts
+- [x] Configure Heroku Clock 
 - [ ] Schedule scraping of instagram to once of day
-- [ ] Deploy on Heroku
+- [x] Deploy on Heroku
