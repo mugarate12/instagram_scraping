@@ -22,7 +22,7 @@ const cron = require('cron')
 //   timeZone: "America/Sao_Paulo"
 // })
 new cron.CronJob(
-  "*/3 * * * * *",
+  "* 1 * * *",
   async () => {
     console.log('sou uma cron')
     const date = new Date()
