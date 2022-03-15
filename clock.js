@@ -23,8 +23,10 @@ const cron = require('cron')
 // })
 new cron.CronJob(
   "*/3 * * * * *",
-  () => {
+  async () => {
     console.log('sou uma cron')
+    const date = new Date()
+    console.log('day: ', date.getDay(), 'hours: ', date.getHours(), 'minutes: ', date.getMinutes());
   },
   () => {},
   true,
