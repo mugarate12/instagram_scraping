@@ -1,13 +1,32 @@
 const cron = require('cron')
-const { scrapingController } = require('./build/src/controllers')
+// const { scrapingController } = require('./build/src/controllers')
 
-const runRoutine = () => {
-  scrapingController.routine()
-}
+// const runRoutine = () => {
+//   scrapingController.routine()
+// }
 
-new cron.CronJob({
-  cronTime: "*/3 * * * * *", //every three minutes
-  onTick: runRoutine,
-  start: true,
-  timeZone: "America/Sao_Paulo"
-})
+// var threeSecondInterval = function(){
+//   console.log("Isso é a clock function?");
+// }
+// setInterval(threeSecondInterval, 3000)
+
+// //For specific times, use a chron job
+// var fifteenSeconsAfterMinute = function() {
+// console.log("Another minute is gone forever. Hopefully, you made the most of it...");
+// }
+
+// new cron.CronJob({
+//   cronTime: "*/3 * * * * *", //every three minutes
+//   // onTick: runRoutine,
+//   start: true,
+//   timeZone: "America/Sao_Paulo"
+// })
+new cron.CronJob(
+  "*/3 * * * * *",
+  () => {
+    console.log('sou uma cron')
+  },
+  () => {},
+  true,
+  "America/Sao_Paulo"
+)
