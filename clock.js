@@ -1,5 +1,6 @@
 const cron = require('cron')
-// const { scrapingController } = require('./build/src/controllers')
+const moment = require('moment-timezone')
+const { scrapingController } = require('./build/src/controllers')
 
 // const runRoutine = () => {
 //   scrapingController.routine()
@@ -22,11 +23,11 @@ const cron = require('cron')
 //   timeZone: "America/Sao_Paulo"
 // })
 new cron.CronJob(
-  "10 * * * *",
+  "*/10 * * * *",
   async () => {
-    console.log('sou uma cron')
-    const date = new Date()
-    console.log('day: ', date.getDay(), 'hours: ', date.getHours(), 'minutes: ', date.getMinutes());
+    console.log('executando coleta!')
+    console.log(moment().tz('America/Sao_Paulo').format('DD-MM-YYYY HH:mm:ss'))
+    // await scrapingController.routine()
   },
   () => {},
   true,
