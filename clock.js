@@ -27,7 +27,8 @@ new cron.CronJob(
   async () => {
     console.log('executando coleta!')
     console.log(moment().tz('America/Sao_Paulo').format('DD-MM-YYYY HH:mm:ss'))
-    // await scrapingController.routine()
+    await scrapingController.routine()
+    console.log('coleta efetuada!')
   },
   () => {},
   true,
