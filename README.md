@@ -40,5 +40,5 @@ $ npm run dev
 - [x] Save link of image and content of post in database
 - [x] Create route to get all information of 9 recent posts
 - [x] Configure Heroku Clock 
-- [ ] Schedule scraping of instagram to once of day
+- [x] Schedule scraping of instagram every ten minutes
 - [x] Deploy on Heroku

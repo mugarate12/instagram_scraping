@@ -24,7 +24,7 @@ interface postsContentInterface {
 }
 
 export default class ScrapingController {
-  private url = 'https://www.instagram.com/raiocelular/'
+  private url = String(process.env.INSTAGRAM_TO_SCRAP)
   // each grid conteins three posts, then total is 3 (for example) get 9 posts
   private totalOfGrids = 3
 
@@ -164,60 +164,6 @@ export default class ScrapingController {
         content
       })
     }
-
-    // const requests = postsSources.map(async (postSource) => {
-    //   let content = ''
-    //   let isCatchError = false
-
-    //   const postPage = await this.goToPage(browser, postSource.postRef)
-
-    //   await postPage.evaluate(() => {
-    //     let result = ''
-
-    //     let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
-
-    //     if (!!spanWithText) {
-    //       result = String(spanWithText.textContent)
-    //     }
-
-    //     return result
-    //   })
-    //     .then(response => {
-    //       content = response
-    //     })
-    //     .catch(() => {
-    //       isCatchError = true
-    //     })
-
-    //   if (isCatchError) {
-    //     const postPage = await this.goToPage(browser, postSource.postRef)
-
-    //     await postPage.evaluate(() => {
-    //       let result = ''
-  
-    //       let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
-  
-    //       if (!!spanWithText) {
-    //         result = String(spanWithText.textContent)
-    //       }
-  
-    //       return result
-    //     })
-    //       .then(response => {
-    //         content = response
-    //       })
-    //   }
-
-    //   result.push({
-    //     ...postSource,
-    //     content
-    //   })
-
-    //   await this.sleep(5)
-
-    //   await postPage.close()
-    // })
-    // await Promise.all(requests)
 
     return result
   }
