@@ -5,12 +5,10 @@ import dotenv from 'dotenv'
 import http from 'http'
 import { errors } from 'celebrate'
 
-import init from './database'
 import routes from './routes'
 
 dotenv.config()
 const app = express()
-init()
 
 app.use(cors({
   origin: true,

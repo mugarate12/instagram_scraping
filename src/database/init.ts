@@ -4,7 +4,6 @@ import {
   Scraping
 } from './models'
 
-
 dotenv.config()
 
 const applicationType = String(process.env.NODE_ENV)
@@ -15,4 +14,4 @@ const init = () => {
   })
 }
 
-export default init
+init()
