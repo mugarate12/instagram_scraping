@@ -20,6 +20,7 @@ This project automate the process to update recent media information to a commer
 
 ## Configuration
 1. put informations to instagram account used to login and scraping posts content in `.env` like a `.env.example`
+2. if you deploy using Heroku as needed add buildpack `https://github.com/jontewks/puppeteer-heroku-buildpack`
 
 ## Running
 

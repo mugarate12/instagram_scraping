@@ -67,6 +67,8 @@ export default class ScrapingController {
     await page.click('#loginForm > div > div:nth-child(3) > button > div')
 
     await this.sleep(10)
+
+    await page.close()
   }
 
   /**
@@ -118,39 +120,23 @@ export default class ScrapingController {
       return result.slice(1, result.length)
     }, this.totalOfGrids)
 
+    await page.close()
+
     return result
   }
 
   private getPostsContent = async (browser: puppeteer.Browser, postsSources: Array<postsSourceInterface>) => {
     let result: Array<postsContentInterface> = []
 
-    const requests = postsSources.map(async (postSource) => {
+    for (let index = 0; index < postsSources.length; index++) {
+      const postSource = postsSources[index];
       let content = ''
-      let isCatchError = false
+      let success = false
+      let tryAgainGetContent = 0
 
-      const postPage = await this.goToPage(browser, postSource.postRef)
-
-      await postPage.evaluate(() => {
-        let result = ''
-
-        let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
-
-        if (!!spanWithText) {
-          result = String(spanWithText.textContent)
-        }
-
-        return result
-      })
-        .then(response => {
-          content = response
-        })
-        .catch(() => {
-          isCatchError = true
-        })
-
-      if (isCatchError) {
+      while (tryAgainGetContent <= 5 && !success && !content) {
         const postPage = await this.goToPage(browser, postSource.postRef)
-
+        
         await postPage.evaluate(() => {
           let result = ''
   
@@ -162,21 +148,76 @@ export default class ScrapingController {
   
           return result
         })
-          .then(response => {
+          .then(async (response) => {
             content = response
+            success = true
+            
+            await postPage.close()
+          })
+          .catch(() => {
+            tryAgainGetContent += 1
           })
       }
-
+        
       result.push({
         ...postSource,
         content
       })
+    }
 
-      await this.sleep(5)
+    // const requests = postsSources.map(async (postSource) => {
+    //   let content = ''
+    //   let isCatchError = false
 
-      await postPage.close()
-    })
-    await Promise.all(requests)
+    //   const postPage = await this.goToPage(browser, postSource.postRef)
+
+    //   await postPage.evaluate(() => {
+    //     let result = ''
+
+    //     let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
+
+    //     if (!!spanWithText) {
+    //       result = String(spanWithText.textContent)
+    //     }
+
+    //     return result
+    //   })
+    //     .then(response => {
+    //       content = response
+    //     })
+    //     .catch(() => {
+    //       isCatchError = true
+    //     })
+
+    //   if (isCatchError) {
+    //     const postPage = await this.goToPage(browser, postSource.postRef)
+
+    //     await postPage.evaluate(() => {
+    //       let result = ''
+  
+    //       let spanWithText = document.getElementsByClassName('_7UhW9   xLCgt      MMzan   KV-D4           se6yk       T0kll ')[0]
+  
+    //       if (!!spanWithText) {
+    //         result = String(spanWithText.textContent)
+    //       }
+  
+    //       return result
+    //     })
+    //       .then(response => {
+    //         content = response
+    //       })
+    //   }
+
+    //   result.push({
+    //     ...postSource,
+    //     content
+    //   })
+
+    //   await this.sleep(5)
+
+    //   await postPage.close()
+    // })
+    // await Promise.all(requests)
 
     return result
   }
@@ -211,7 +252,8 @@ export default class ScrapingController {
     
     await browserOptions.closeBrowser(browser)
 
-    await this.updateData(posts)
+    // await this.updateData(posts)
+    return posts
   }
 
   public get = async (req: Request, res: Response) => {
@@ -225,16 +267,7 @@ export default class ScrapingController {
   }
 
   public test = async (req: Request, res: Response) => {
-    const browser = await browserOptions.runBrowser()
-
-    await this.loginInInstagram(browser)
-    
-    const result = await this.getPostsImagesSourcesAndReferences(browser)
-    const posts = await this.getPostsContent(browser, result)
-    
-    await browserOptions.closeBrowser(browser)
-
-    await this.updateData(posts)
+    const posts = await this.routine()
 
     return res.status(200).json({
       resultado: posts,
