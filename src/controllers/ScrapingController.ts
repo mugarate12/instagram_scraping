@@ -252,7 +252,7 @@ export default class ScrapingController {
     
     await browserOptions.closeBrowser(browser)
 
-    // await this.updateData(posts)
+    await this.updateData(posts)
     return posts
   }
 
