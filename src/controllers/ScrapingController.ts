@@ -3,7 +3,8 @@ import puppeteer from 'puppeteer'
 import dotenv from 'dotenv'
 
 import {
-  browserOptions
+  browserOptions,
+  logger
 } from './../utils'
 
 import {
@@ -41,14 +42,14 @@ export default class ScrapingController {
     while (tryGoToPage < 5 && !sucess) {
       await page.goto(url, { waitUntil: ['networkidle0', 'load'] })
         .then(response => {
-          console.log(response.status(), url);
+          logger.info(response.status(), url);
 
           if (response.status() === 200) {
             sucess = true
           }
         })
         .catch(error => {
-          console.log('go to page error: ', error)
+          logger.error('go to page error: ', error)
         })
 
       tryGoToPage += 1
