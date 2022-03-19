@@ -6,6 +6,7 @@ import http from 'http'
 import { errors } from 'celebrate'
 
 import routes from './routes'
+import routines from './routines'
 
 dotenv.config()
 const app = express()
@@ -21,6 +22,8 @@ app.use(cors({
 app.use(express.json())
 
 app.use(routes)
+
+routines()
 
 // celebrate errors
 app.use(errors())
