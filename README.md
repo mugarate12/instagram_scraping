@@ -7,6 +7,7 @@ This project automate the process to update recent media information to a commer
 - [Requirements](#requirements)
 - [Configuration](#configuration)
 - [Running](#running)
+- [Comments](#comments)
 - [Features](#features)
 
 ## Dependencies
@@ -30,9 +31,12 @@ This project automate the process to update recent media information to a commer
 $ npm run dev
 ```
 
+## Comments
+1. if you want run this project in heroku, watch this problem: if you use `free dyno`, you get a wrong result. `heroku free dyno` hibernate and stop your clock process, so not run routine of scraping a instagram page.
+
 ## Features
 
-- [ ] Automated tests
+- [x] Automated tests
 - [x] Scraping instagram page of a public perfil and get 9 recent posts image source and page ref
 - [x] Login on pseudoInstagram
 - [x] Get content of each post
@@ -41,4 +45,6 @@ $ npm run dev
 - [x] Create route to get all information of 9 recent posts
 - [x] Configure Heroku Clock 
 - [x] Schedule scraping of instagram every ten minutes
-- [x] Deploy on Heroku
+- [ ] Create routine with cron to scraping instagram information without heroku clock
+- [x] Deploy on Heroku 
+- [ ] Deploy in Amazon EC2
