@@ -4,6 +4,7 @@ This project automate the process to update recent media information to a commer
 
 - [Overview](#overview)
 - [Dependencies](#dependencies)
+- [Instalation](#instalation)
 - [Requirements](#requirements)
 - [Configuration](#configuration)
 - [Running](#running)
@@ -15,9 +16,34 @@ This project automate the process to update recent media information to a commer
 - **[Node.js e NPM](https://www.nodejs.org/)** (suportadas versões: 10.x.x)
 - **[Mysql](https://www.mysql.com/)**
 
+## Instalation
+if you install this project on AWS EC2 (for example) you need make this steps:
+
+### Git
+```bash
+  sudo apt-get install git-all
+```
+
+### Crominium
+1. na raiz do projeto, vá até cd ./node_modules/puppeteer
+```bash
+$ cd ./node_modules/puppeteer
+```
+
+2. instale todas as dependências dele
+```bash
+$ npm run install
+```
+
+3. caso necessário, instale todas as dependências necessárias no Debian para execução do navegador (Chromium)
+```bash
+$ Sudo apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
+```
+
 ## Requirements
 
 1. instagram perfil need to public
+2. you need create database to use, and include this in configuration of `.env`
 
 ## Configuration
 1. put informations to instagram account used to login and scraping posts content in `.env` like a `.env.example`
