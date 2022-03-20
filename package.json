@@ -13,8 +13,8 @@
     "dev:win32": "SET NODE_ENV=development&&npm run initialize-database&&nodemon --exec ts-node --files src/server.ts",
     "dev:darwin:linux": "export NODE_ENV=development&&npm run initialize-database&&nodemon --exec ts-node --files src/server.ts",
     "start": "run-script-os",
-    "start:win32": "SET NODE_ENV=production&&node build/src/server.js",
-    "start:darwin:linux": "export NODE_ENV=production&&node build/src/server.js"
+    "start:win32": "SET NODE_ENV=production&&npm run initialize-database&&node build/src/server.js",
+    "start:darwin:linux": "export NODE_ENV=production&&npm run initialize-database&&node build/src/server.js"
   },
   "keywords": [],
   "author": "",
