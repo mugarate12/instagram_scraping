@@ -12,12 +12,15 @@
     "dev": "run-script-os",
     "dev:win32": "SET NODE_ENV=development&&npm run initialize-database&&nodemon --exec ts-node --files src/server.ts",
     "dev:darwin:linux": "export NODE_ENV=development&&npm run initialize-database&&nodemon --exec ts-node --files src/server.ts",
+    "show-logs": "pm2 logs --lines 1000",
+    "clear-logs": "pm2 flush",
+    "production": "pm2 start pm2.json",
     "start": "run-script-os",
-    "start:win32": "SET NODE_ENV=production&&npm run initialize-database&&node build/src/server.js",
-    "start:darwin:linux": "export NODE_ENV=production&&npm run initialize-database&&node build/src/server.js"
+    "start:win32": "SET NODE_ENV=production&&npm run initialize-database&&npm run production",
+    "start:darwin:linux": "export NODE_ENV=production&&npm run initialize-database&&npm run production"
   },
   "keywords": [],
-  "author": "",
+  "author": "Mateus Cardoso dos Santos",
   "license": "ISC",
   "dependencies": {
     "celebrate": "^15.0.1",

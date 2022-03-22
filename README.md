@@ -40,6 +40,28 @@ $ npm run install
 $ Sudo apt-get install gconf-service libasound2 libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgcc1 libgconf-2-4 libgdk-pixbuf2.0-0 libglib2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 libxi6 libxrandr2 libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils wget
 ```
 
+### Install PM2
+
+#### One way: Curl Method
+```bash
+apt update && apt install sudo curl && curl -sL https://raw.githubusercontent.com/Unitech/pm2/master/packager/setup.deb.sh | sudo -E bash -
+```
+
+#### Two way yarn or npm:
+```bash
+npm install pm2 -g
+```
+
+#### Install auto complete of PM2
+```bash
+pm2 completion install
+```
+
+#### Update PM2
+```bash
+npm install pm2 -g && pm2 update
+```
+
 ## Requirements
 
 1. instagram perfil need to public
@@ -59,6 +81,19 @@ $ npm run dev
 
 ## Comments
 1. if you want run this project in heroku, watch this problem: if you use `free dyno`, you get a wrong result. `heroku free dyno` hibernate and stop your clock process, so not run routine of scraping a instagram page.
+2. if AWS EC2 not run `build`, execute this commands:
+```bash
+$ sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+```
+
+```bash
+$ sudo /sbin/mkswap /var/swap.1
+```
+
+```bash
+$ sudo /sbin/swapon /var/swap.1
+```
+
 
 ## Features
 
