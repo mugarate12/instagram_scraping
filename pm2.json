@@ -3,7 +3,7 @@
     {
       "script": "build/src/server.js",
       "instances": "1",
-      "exec_mode": "cluster",
+      "exec_mode": "fork",
       "name": "primary",
       "instance_var": "INSTANCE_ID",
       "cron_restart": "7 * * * *",
