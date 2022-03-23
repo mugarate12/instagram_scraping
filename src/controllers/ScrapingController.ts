@@ -42,7 +42,7 @@ export default class ScrapingController {
     while (tryGoToPage < 5 && !sucess) {
       await page.goto(url, { waitUntil: ['networkidle0', 'load'] })
         .then(response => {
-          logger.info(response.status(), url);
+          logger.info(`status: ${response.status()}, url: ${url}`);
 
           if (response.status() === 200) {
             sucess = true
