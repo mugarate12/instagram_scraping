@@ -2,9 +2,9 @@
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import http from 'http'
 import { errors } from 'celebrate'
 
+import constants from './config/constants'
 import routes from './routes'
 import routines from './routines'
 
@@ -22,6 +22,8 @@ app.use(cors({
 app.use(express.json())
 
 app.use(routes)
+
+app.use(express.static(constants.directories.postsImages))
 
 routines()
 

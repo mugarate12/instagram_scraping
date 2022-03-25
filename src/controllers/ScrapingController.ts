@@ -1,6 +1,8 @@
 import { Request, response, Response } from 'express'
 import puppeteer from 'puppeteer'
 import dotenv from 'dotenv'
+import path from 'path'
+import fs from 'fs'
 
 import {
   browserOptions,
@@ -10,6 +12,8 @@ import {
 import {
   Scraping
 } from './../database/models'
+
+import constants from './../config/constants'
 
 dotenv.config()
 
@@ -126,6 +130,22 @@ export default class ScrapingController {
     return result
   }
 
+  private getPostImage = async (browser: puppeteer.Browser, postRef: string, postImageSrc: string) => {
+    const page = await browserOptions.newPage(browser)
+    fs.mkdirSync(constants.directories.postsImages, { recursive: true })
+
+    await page.goto(postImageSrc, { waitUntil: ['networkidle0', 'load'] })
+
+    let reference = path.basename(postRef)
+    
+    logger.info(`post ref: ${postRef}, post ref process: ${reference}`)
+    const filename = `${reference}.png`
+    const filepath = path.resolve(constants.directories.postsImages, filename)
+
+    await page.screenshot({ path: filepath, fullPage: true })
+    await page.close()
+  }
+
   private getPostsContent = async (browser: puppeteer.Browser, postsSources: Array<postsSourceInterface>) => {
     let result: Array<postsContentInterface> = []
 
@@ -164,6 +184,12 @@ export default class ScrapingController {
         ...postSource,
         content
       })
+    }
+
+    for (let index = 0; index < result.length; index++) {
+      const post = result[index]
+      
+      await this.getPostImage(browser, post.postRef, post.imageSource)
     }
 
     return result
@@ -214,11 +240,21 @@ export default class ScrapingController {
   }
 
   public test = async (req: Request, res: Response) => {
-    const posts = await this.routine()
+    await this.routine()
+    // const browser = await browserOptions.runBrowser()
+    // await this.loginInInstagram(browser)
 
-    return res.status(200).json({
-      resultado: posts,
-      // postText
-    })
+    // // solução gambiarra: tirar screenshot de cada tela do instagram do post pera referencia do src pra mandar o arquivo pro front
+    // const result = await this.getPostsImagesSourcesAndReferences(browser)
+    // const posts = await this.getPostsContent(browser, result)
+          
+    // const page = await browserOptions.newPage(browser)
+    // await page.goto('https://instagram.fapq2-1.fna.fbcdn.net/v/t51.2885-15/277217135_1332062237276342_6301875083765628716_n.jpg?stp=dst-jpg_e35_p1080x1080&_nc_ht=instagram.fapq2-1.fna.fbcdn.net&_nc_cat=102&_nc_ohc=lGkvoxOvte0AX-L4lW1&edm=AABBvjUBAAAA&ccb=7-4&ig_cache_key=MjgwMTIzNjIxMDgwOTAzODc5OQ%3D%3D.2-ccb7-4&oh=00_AT9317CPwDJQfKrayEhxNCj5QK3NWPFRgJn96BPIhxbtjw&oe=6244983B&_nc_sid=83d603')
+    // await page.screenshot({ path: 'screenshot.png' })
+    // // await page.goto('https://www.instagram.com/p/Cba6dcGuWL9/')
+    // // await this.sleep(20)
+    // await browserOptions.closeBrowser(browser)
+
+    return res.status(200).json({})
   }
 }
