@@ -33,10 +33,6 @@ interface postsContentInterface {
 }
 
 export default class ScrapingController {
-  private url = String(process.env.INSTAGRAM_TO_SCRAP)
-  // each grid conteins three posts, then total is 3 (for example) get 9 posts
-  private totalOfGrids = 3
-
   private updateData = async (postsContent: Array<postsContentInterface>) => {
     if (postsContent.length > 0) {
       // delete all data
@@ -67,7 +63,6 @@ export default class ScrapingController {
 
     const result = await scrapingService.getPostsImagesSourcesAndReferences(browser, url, totalOfGrids)
     const posts = await scrapingService.getPostsContent(browser, result)
-
 
     await this.updateData(posts)
     return posts

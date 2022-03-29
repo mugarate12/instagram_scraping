@@ -60,6 +60,7 @@ export default class ScrapingService {
    */
   private getPostImage = async (browser: puppeteer.Browser, postRef: string, postImageSrc: string) => {
     const page = await browserOptions.newPage(browser)
+    
     fs.mkdirSync(constants.directories.postsImages, { recursive: true })
 
     await page.goto(postImageSrc, { waitUntil: ['networkidle0', 'load'] })
@@ -189,6 +190,8 @@ export default class ScrapingService {
       })
     }
 
+    fs.rmdirSync(constants.directories.postsImages, { recursive: true })
+    
     for (let index = 0; index < result.length; index++) {
       const post = result[index]
       
