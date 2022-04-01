@@ -4,9 +4,14 @@ import path from 'path'
 import fs from 'fs'
 
 import {
+  Scraping
+} from './../database/models'
+
+import {
   browserOptions,
   logger
 } from './../utils'
+
 import constants from '../config/constants'
 
 dotenv.config()
@@ -68,11 +73,18 @@ export default class ScrapingService {
     let reference = path.basename(postRef)
     
     logger.info(`post ref: ${postRef}, post ref process: ${reference}`)
+    const basePath = String(process.env.BASE_URL_TO_MOUNT_IMAGE_REFERENCE)
     const filename = `${reference}.png`
     const filepath = path.resolve(constants.directories.postsImages, filename)
+    
+    const imageReference = `${basePath}/${filename}`
+
+    logger.info(`filepath: ${imageReference}`)
 
     await page.screenshot({ path: filepath, fullPage: true })
     await page.close()
+
+    return imageReference
   }
 
   /**
@@ -195,9 +207,38 @@ export default class ScrapingService {
     for (let index = 0; index < result.length; index++) {
       const post = result[index]
       
-      await this.getPostImage(browser, post.postRef, post.imageSource)
+      const postImageReference = await this.getPostImage(browser, post.postRef, post.imageSource)
+
+      result[index] = {
+        ...post,
+        imageSource: postImageReference
+      }
     }
 
     return result
+  }
+
+  /**
+   * @description use this to update data of posts in database
+   * @param postsContent content of posts with text content of post and create image of each post in postsImages directory
+   */
+  public updateData = async (postsContent: Array<postsContentInterface>) => {
+    if (postsContent.length > 0) {
+      // delete all data
+      await Scraping.destroy({
+        truncate: true,
+        force: true
+      })
+  
+      const requests = postsContent.map(async (post) => {
+        await Scraping.create({
+          content: post.content,
+          ref: post.postRef,
+          source: post.imageSource
+        })
+      })
+  
+      await Promise.all(requests)
+    }
   }
 }

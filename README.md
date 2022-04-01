@@ -94,7 +94,6 @@ $ sudo /sbin/mkswap /var/swap.1
 $ sudo /sbin/swapon /var/swap.1
 ```
 
-
 ## Features
 
 - [x] Automated tests
