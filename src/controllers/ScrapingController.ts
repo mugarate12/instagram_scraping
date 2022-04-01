@@ -40,7 +40,7 @@ export default class ScrapingController {
     })
 
     return res.status(200).json({
-      data: posts
+      posts: posts
     })
   }
 
