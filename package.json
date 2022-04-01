@@ -18,7 +18,8 @@
     "stop-production": "pm2 stop pm2.json",
     "start": "run-script-os",
     "start:win32": "SET NODE_ENV=production&&npm run initialize-database&&npm run production",
-    "start:darwin:linux": "export NODE_ENV=production&&npm run initialize-database&&npm run production"
+    "start:darwin:linux": "export NODE_ENV=production&&npm run initialize-database&&npm run production",
+    "restart": "npm run stop-production&&npm run start"
   },
   "keywords": [],
   "author": "Mateus Cardoso dos Santos",
