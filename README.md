@@ -106,6 +106,6 @@ $ sudo /sbin/swapon /var/swap.1
 - [x] Configure Heroku Clock 
 - [x] Schedule scraping of instagram every ten minutes
 - [ ] Add Swagger docs
-- [ ] Create routine with cron to scraping instagram information without heroku clock
+- [x] Create routine with cron to scraping instagram information without heroku clock
 - [x] Deploy on Heroku 
-- [ ] Deploy in Amazon EC2
+- [x] Deploy in Amazon EC2
