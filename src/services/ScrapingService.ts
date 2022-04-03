@@ -202,7 +202,15 @@ export default class ScrapingService {
       })
     }
 
-    fs.rmdirSync(constants.directories.postsImages, { recursive: true })
+    logger.info("creating posts images...")
+    const directoryExists = fs.existsSync(constants.directories.postsImages)
+
+    if (directoryExists) {
+      fs.rmdirSync(constants.directories.postsImages, { recursive: true })
+      fs.mkdirSync(constants.directories.postsImages, { recursive: true })
+    } else {
+      fs.mkdirSync(constants.directories.postsImages, { recursive: true })
+    }
     
     for (let index = 0; index < result.length; index++) {
       const post = result[index]
