@@ -202,6 +202,7 @@ export default class ScrapingService {
       })
     }
 
+    logger.info(`dir: ${constants.directories.postsImages}`)
     logger.info("creating posts images...")
     const directoryExists = fs.existsSync(constants.directories.postsImages)
 
