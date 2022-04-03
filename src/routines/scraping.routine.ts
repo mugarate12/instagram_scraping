@@ -17,8 +17,9 @@ const instagramScraping = new Cron.CronJob(String(process.env.SCRAPING_ROUTINE_C
   logger.info(`${routineInitialDate}: executando coleta...`)
 
   await scrapingController.routine()
-    .catch(() => {
+    .catch((error) => {
       logger.error(`${routineInitialDate}: erro na coleta!`)
+      logger.error(`Erro: ${error}`)
     })
 
   logger.info(`${routineInitialDate}: coleta realizada!`)
