@@ -91,6 +91,8 @@ export default class ScrapingService {
    * @description log in instagram base in .env variables INSTAGRAM_USER and INSTAGRAM_PASSWORD
    */
   public loginInInstagram = async (browser: puppeteer.Browser) => {
+    logger.info('login in instagram')
+
     const url = 'https://www.instagram.com'
     const page = await this.goToPage(browser, url)
 
@@ -110,8 +112,8 @@ export default class ScrapingService {
    * @returns content of posts
    */
    public getPostsImagesSourcesAndReferences = async (browser: puppeteer.Browser, url: string, totalOfGrids: number) => {
-    const page = await this.goToPage(browser, url)
     logger.info(`first step: get posts images sources and references \n page: ${url}`)
+    const page = await this.goToPage(browser, url)
 
     const result: Array<postsSourceInterface> = await page.evaluate((totalOfGrids) => {
       let result = [

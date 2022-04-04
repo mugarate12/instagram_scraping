@@ -2,7 +2,8 @@ import { Request, response, Response } from 'express'
 import dotenv from 'dotenv'
 
 import {
-  browserOptions
+  browserOptions,
+  logger
 } from './../utils'
 
 import {
@@ -46,6 +47,10 @@ export default class ScrapingController {
 
   public test = async (req: Request, res: Response) => {
     await this.routine()
+      .catch(error => {
+        logger.error(`Erro na coleta!`)
+        logger.error(`Erro: ${error}`)
+      })
 
     return res.status(200).json({})
   }

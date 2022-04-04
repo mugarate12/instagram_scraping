@@ -43,7 +43,7 @@ export default class BrowserOptions {
     ]
   
     const browser = await puppeteer.launch({ 
-      headless: true, 
+      headless: false, 
       args: minimal_args,
       slowMo: 200
     })
