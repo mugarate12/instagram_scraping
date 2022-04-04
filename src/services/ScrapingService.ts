@@ -111,6 +111,7 @@ export default class ScrapingService {
    */
    public getPostsImagesSourcesAndReferences = async (browser: puppeteer.Browser, url: string, totalOfGrids: number) => {
     const page = await this.goToPage(browser, url)
+    logger.info(`first step: get posts images sources and references \n page: ${url}`)
 
     const result: Array<postsSourceInterface> = await page.evaluate((totalOfGrids) => {
       let result = [
